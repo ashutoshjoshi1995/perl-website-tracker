@@ -1,5 +1,7 @@
 use LWP::UserAgent;
 use File::Compare;
+use Text::Diff;
+use File::Copy;
 $url = 'http://aircure.in/job/opportunities.php';
 my $ua = LWP::UserAgent->new;
 my $response = $ua->get( $url );
@@ -22,6 +24,9 @@ for( ; ; )
 	}
 	else {
 		print "Updated\n";
+		my $diff = diff "old.html", "new.html", { STYLE => "OldStyle" };
+		print $diff;
+		copy("new.html","old.html") or die "Copy failed: $!";
 	}
 	sleep(2);
 }
